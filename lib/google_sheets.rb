@@ -21,14 +21,14 @@ module GoogleSheets
   end
 
   def self.api_key_service
-    Google::Apis::SheetsV4::SheetsService.new.tap do |service|
-      service.key = 'AIzaSyDGVdRSvCxSz9irC_pSVosxOdaGEgnSAW4'
+    @api_key_service ||= Google::Apis::SheetsV4::SheetsService.new.tap do |service|
+      service.key = ENV['SERVICE_KEY']
     end
   end
 
   def self.oauth_service
     # Initialize the API
-    Google::Apis::SheetsV4::SheetsService.new.tap do |service|
+    @oauth_service ||= Google::Apis::SheetsV4::SheetsService.new.tap do |service|
       service.client_options.application_name = APPLICATION_NAME
       service.authorization = authorize
     end

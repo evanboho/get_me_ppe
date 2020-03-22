@@ -1,11 +1,16 @@
-%h1 Get Me PPE
-
-#map.map
+%div{ style: 'margin: 0 auto; height: 350px'}
+  %h3{style: 'float: left'}
+    Hospital Map
+  #hospitalMap.map{style: 'float: right'}
+%div{ style: 'margin: 0 auto; height: 350px'}
+  %h3{style: 'float: left'}
+    Donor Map
+  #donorMap.map{style: 'float: right'}
 
 %script{type: 'text/javascript'}
   :plain
-    var map = new ol.Map({
-      target: 'map',
+    var hospitalMap = new ol.Map({
+      target: 'hospitalMap',
       layers: [
         new ol.layer.Tile({
           source: new ol.source.OSM()
@@ -13,12 +18,24 @@
       ],
       view: new ol.View({
         center: ol.proj.fromLonLat([-122.457402676806, 37.76307]),
-        zoom: 8
+        zoom: 9
+      })
+    });
+    var donorMap = new ol.Map({
+      target: 'donorMap',
+      layers: [
+        new ol.layer.Tile({
+          source: new ol.source.OSM()
+        })
+      ],
+      view: new ol.View({
+        center: ol.proj.fromLonLat([-122.457402676806, 37.76307]),
+        zoom: 9
       })
     });
 
 - @hospitals.each do |hospital|
-  - next unless hospital.longitude && hospital.latitude
+  - next unless hospital && hospital.longitude && hospital.latitude
   :javascript
     var lon = #{hospital.longitude}
     var lat = #{hospital.latitude}
@@ -33,10 +50,10 @@
        })
     });
     layer.set("name", "#{hospital.organization}")
-    map.addLayer(layer);
+    hospitalMap.addLayer(layer);
 
 - @donors.each do |donor|
-  - next unless donor.longitude && donor.latitude
+  - next unless donor && donor.longitude && donor.latitude
   :javascript
     var lon = #{donor.longitude}
     var lat = #{donor.latitude}
@@ -51,4 +68,4 @@
        })
     });
     layer.set("name", "#{donor.name}")
-    map.addLayer(layer);
+    donorMap.addLayer(layer);

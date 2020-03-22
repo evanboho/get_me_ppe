@@ -1,0 +1,54 @@
+%h1 Get Me PPE
+
+#map.map
+
+%script{type: 'text/javascript'}
+  :plain
+    var map = new ol.Map({
+      target: 'map',
+      layers: [
+        new ol.layer.Tile({
+          source: new ol.source.OSM()
+        })
+      ],
+      view: new ol.View({
+        center: ol.proj.fromLonLat([-122.457402676806, 37.76307]),
+        zoom: 8
+      })
+    });
+
+- @hospitals.each do |hospital|
+  - next unless hospital.longitude && hospital.latitude
+  :javascript
+    var lon = #{hospital.longitude}
+    var lat = #{hospital.latitude}
+    var layer = new ol.layer.Vector({
+       name: "hi",
+       source: new ol.source.Vector({
+           features: [
+               new ol.Feature({
+                   geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
+               })
+           ]
+       })
+    });
+    layer.set("name", "#{hospital.organization}")
+    map.addLayer(layer);
+
+- @donors.each do |donor|
+  - next unless donor.longitude && donor.latitude
+  :javascript
+    var lon = #{donor.longitude}
+    var lat = #{donor.latitude}
+    var layer = new ol.layer.Vector({
+       name: "hi",
+       source: new ol.source.Vector({
+           features: [
+               new ol.Feature({
+                   geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
+               })
+           ]
+       })
+    });
+    layer.set("name", "#{donor.name}")
+    map.addLayer(layer);

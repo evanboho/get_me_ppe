@@ -12,6 +12,17 @@ class Donor < ApplicationRecord
     address_zip:                'Home Address: Zip Code',
   }.freeze
 
+  def public_attributes
+    {
+      name:          name,
+      email_address: email_address,
+      phone_number:  phone_number,
+      address:       address,
+      latitude:      latitude,
+      longitude:     longitude,
+    }
+  end
+
   def self.fetch_all
     results = GetMePpe::Spreadsheets.donors
     headers = results.values[0]

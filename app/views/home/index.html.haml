@@ -1,71 +1,8 @@
-%div{ style: 'margin: 0 auto; height: 350px'}
-  %h3{style: 'float: left'}
-    Hospital Map
-  #hospitalMap.map{style: 'float: right'}
-%div{ style: 'margin: 0 auto; height: 350px'}
-  %h3{style: 'float: left'}
-    Donor Map
-  #donorMap.map{style: 'float: right'}
+#hospital-map.map{style: 'float: left'}
 
-%script{type: 'text/javascript'}
-  :plain
-    var hospitalMap = new ol.Map({
-      target: 'hospitalMap',
-      layers: [
-        new ol.layer.Tile({
-          source: new ol.source.OSM()
-        })
-      ],
-      view: new ol.View({
-        center: ol.proj.fromLonLat([-122.457402676806, 37.76307]),
-        zoom: 9
-      })
-    });
-    var donorMap = new ol.Map({
-      target: 'donorMap',
-      layers: [
-        new ol.layer.Tile({
-          source: new ol.source.OSM()
-        })
-      ],
-      view: new ol.View({
-        center: ol.proj.fromLonLat([-122.457402676806, 37.76307]),
-        zoom: 9
-      })
-    });
+%ul#donor-list{style: 'float: left'}
 
-- @hospitals.each do |hospital|
-  - next unless hospital && hospital.longitude && hospital.latitude
-  :javascript
-    var lon = #{hospital.longitude}
-    var lat = #{hospital.latitude}
-    var layer = new ol.layer.Vector({
-       name: "hi",
-       source: new ol.source.Vector({
-           features: [
-               new ol.Feature({
-                   geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
-               })
-           ]
-       })
-    });
-    layer.set("name", "#{hospital.organization}")
-    hospitalMap.addLayer(layer);
+:javascript
+  var hospitalData = #{raw @hospitals.map(&:public_attributes).to_json}
+  var donorData = #{raw @donors.map(&:public_attributes).to_json}
 
-- @donors.each do |donor|
-  - next unless donor && donor.longitude && donor.latitude
-  :javascript
-    var lon = #{donor.longitude}
-    var lat = #{donor.latitude}
-    var layer = new ol.layer.Vector({
-       name: "hi",
-       source: new ol.source.Vector({
-           features: [
-               new ol.Feature({
-                   geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
-               })
-           ]
-       })
-    });
-    layer.set("name", "#{donor.name}")
-    donorMap.addLayer(layer);

@@ -19,6 +19,15 @@ class Hospital < ApplicationRecord
     accepts_opened_ppe:         'Can accept opened PPE?',
   }.freeze
 
+  def public_attributes
+    {
+      organization: organization,
+      address: address,
+      latitude: latitude,
+      longitude: longitude
+    }
+  end
+
   def self.fetch_all
     # TODO cache with TTL
 

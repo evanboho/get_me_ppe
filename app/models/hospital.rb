@@ -1,3 +1,5 @@
+require 'concerns/csv_helper'
+
 class Hospital < ApplicationRecord
 
   geocoded_by :address

@@ -2,6 +2,10 @@ module Api
   class DonorsController < ApiController
 
     def index
+      if params[:refresh] == 'true'
+        Donor.fetch_all
+      end
+
       status = params[:status] || ''
       if status == 'any'
         donors = Donor.all

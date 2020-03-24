@@ -57,15 +57,11 @@ class Donor < ApplicationRecord
         obj[k] = result[indexes.fetch(k)]
       end
 
-      begin
-        find_or_initialize_by(name: name).tap do |donor|
-          args.each do |k, v|
-            donor.send("#{k}=", v)
-          end
-          donor.save
+      find_or_initialize_by(name: name).tap do |donor|
+        args.each do |k, v|
+          donor.send("#{k}=", v)
         end
-      rescue =>e
-        byebug
+        donor.save
       end
     end
   end

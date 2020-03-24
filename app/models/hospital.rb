@@ -6,7 +6,7 @@ class Hospital < ApplicationRecord
 
   geocoded_by :address
   before_validation :set_address
-  after_validation :geocode
+  after_validation :geocode, if: -> { address.changed? }
 
   HEADER_VALUES = {
     organization:               'Organization (bold: regional)',
@@ -97,13 +97,15 @@ class Hospital < ApplicationRecord
 
   def set_address
     result = Geocoder.search(address).first
-    return true unless result
+    return true unless result&.house_number
 
     self.address_street = "#{result.house_number} #{result.street}"
     self.address_city = result.city
     self.address_zip = result.postal_code
     self.address_state = result.state
-    self.address = "#{address_street}, #{address_city}, #{address_state} #{address_zip}"
+    if address_street && address_city && address_zip && address_state
+      self.address = "#{address_street}, #{address_city}, #{address_state} #{address_zip}"
+    end
     true
   end
 

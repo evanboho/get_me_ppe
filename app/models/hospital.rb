@@ -2,6 +2,8 @@ require 'concerns/csv_helper'
 
 class Hospital < ApplicationRecord
 
+  extend CsvHelper
+
   geocoded_by :address
   before_validation :set_address
   after_validation :geocode
@@ -47,8 +49,6 @@ class Hospital < ApplicationRecord
     'Merchant'                      => nil,
     'ServiceTime'                   => nil,
   }.freeze
-
-  extend CsvHelper
 
   def public_attributes
     {

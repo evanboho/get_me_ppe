@@ -4,8 +4,8 @@ class Hospital < ApplicationRecord
   after_validation :geocode
 
   HEADER_VALUES = {
-    organization:               'Organization',
-    address:                    'Address',
+    organization:               'Organization (bold: regional)',
+    address:                    'Dropoff Address (Map here: https://drive.google.com/open?id=1XKSENq4VZr5oa5PFc25J_bslfDCjqfRK&usp=sharing)',
     contact_name:               'Point of Contact Name',
     contact_email:              'Point of Contact Email',
     contact_phone:              'Point of Contact Phone',
@@ -32,9 +32,11 @@ class Hospital < ApplicationRecord
     # TODO cache with TTL
 
     results = GetMePpe::Spreadsheets.hospitals
-    headers = results.values[1]
+    headers = results.values[0]
     indexes = HEADER_VALUES.keys.each_with_object({}) do |k, obj|
-      obj[k] = headers.index { |a| a == HEADER_VALUES.fetch(k) }
+      unless obj[k] = headers.index { |a| a == HEADER_VALUES.fetch(k) }
+        raise "No index in #{headers} for #{HEADER_VALUES.fetch(k)}"
+      end
     end
 
     results.values[2..-1].map do |result|
@@ -49,7 +51,7 @@ class Hospital < ApplicationRecord
         args.each do |k, v|
           hospital.send("#{k}=", v)
         end
-        hospital.save
+        hospital.save if hospital.changed?
       end
     end
   end

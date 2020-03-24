@@ -8,9 +8,9 @@ module GetMePpe
       }.freeze,
       hospitals: {
         key: '1IHeI3IA6eLSlUUjpQXPPLufEOtAKfT0Spxv36fk3eVo',
-        range: 'Hospital outreach results'
+        range: '1:1 Hospital outreach'
       }.freeze,
-      donors: {
+      drivers: {
         key: '1UYpr45GHUj_f2ozXh-68T-NndnDOgvG4ZvQtSj6DeUE',
         range: 'A1:Z99'
       }.freeze

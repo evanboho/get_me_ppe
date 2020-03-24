@@ -20,6 +20,24 @@
   <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
 
   <body>
+    <div class="flash-bar">
+      <div style="float: left">
+          Get Me PPE
+      </div>
+      <div style="float: left; padding-left: 20px;">
+        <% if notice %>
+          <div class="alert alert-success"><%= notice %></div>
+        <% elsif alert %>
+          <div class="alert alert-danger"><%= alert %></div>
+        <% end %>
+      </div>
+      <div style="float: right">
+        <% if current_user %>
+          <%= link_to 'logout', destroy_user_session_path, method: :delete %>
+        <% end %>
+      </div>
+    </div>
+
     <%= yield %>
   </body>
 </html>

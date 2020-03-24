@@ -1,0 +1,13 @@
+%div{style: 'width: 980px; margin: 0 auto; padding-top: 40px'}
+  %h2 Log in
+  = form_for(User.new, url: session_path(User.new)) do |f|
+    .field
+      = f.label :email
+      %br/
+      = f.email_field :email, autofocus: true, autocomplete: "email"
+    .field
+      = f.label :password
+      %br/
+      = f.password_field :password, autocomplete: "current-password"
+    .actions
+      = f.submit "Log in"

@@ -1,6 +1,6 @@
 #hospital-map.map{style: 'float: left'}
 
-%ul#donor-list{style: 'float: left'}
+%ul#donor-list{style: 'float: left; margin-top: 40px'}
 
 :javascript
   var hospitalData = #{raw @hospitals.map(&:public_attributes).to_json}

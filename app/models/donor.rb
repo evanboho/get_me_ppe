@@ -20,16 +20,19 @@ class Donor < ApplicationRecord
   }.freeze
 
   def public_attributes
-    {
-      name:               name,
-      email_address:      email_address,
-      phone_number:       phone_number,
-      address_street:     address_street,
-      address_apartment:  address_apartment,
-      address_city:       address_city,
-      latitude:           latitude,
-      longitude:          longitude,
-    }
+    %i(
+      name
+      email_address
+      phone_number
+      address_street
+      address_apartment
+      address_city
+      latitude
+      longitude
+      status
+    ).each_with_object({}) do |field, obj|
+      obj[field] = self.send(field)
+    end
   end
 
   def address

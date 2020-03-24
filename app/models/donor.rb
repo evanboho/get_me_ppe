@@ -93,6 +93,10 @@ class Donor < ApplicationRecord
     end
   end
 
+  def valid_for_csv?
+    address_street.present?
+  end
+
   def notes
     "#{number_of_masks} #{mask_condition}"
   end

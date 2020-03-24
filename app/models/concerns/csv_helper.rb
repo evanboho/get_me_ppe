@@ -3,12 +3,14 @@ require 'csv'
 module CsvHelper
 
   def to_csv(objects)
-    objects_csv_hash = objects.each_with_object([]) do |donor, arr|
-      arr << self::CSV_MAPPING.each_with_object({}) do |(csv_field, donor_field), obj|
-        if donor_field.is_a?(Symbol)
-          obj[csv_field] = donor.send(donor_field)
+    objects_csv_hash = objects.each_with_object([]) do |object, arr|
+      next unless object.valid_for_csv?
+
+      arr << self::CSV_MAPPING.each_with_object({}) do |(csv_field, object_field), obj|
+        if object_field.is_a?(Symbol)
+          obj[csv_field] = object.send(object_field)
         else
-          obj[csv_field] = donor_field
+          obj[csv_field] = object_field
         end
       end
     end
@@ -19,7 +21,6 @@ module CsvHelper
         csv << row.values
       end
     end
-
   end
 
 end

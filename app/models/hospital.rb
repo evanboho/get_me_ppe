@@ -85,6 +85,10 @@ class Hospital < ApplicationRecord
     end
   end
 
+  def valid_for_csv?
+    address_street.present?
+  end
+
   private
 
   def address_country

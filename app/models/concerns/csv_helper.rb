@@ -1,7 +1,6 @@
 require 'csv'
 
 module CsvHelper
-  extend ActiveSupport::Concern
 
   def to_csv(objects)
     objects_csv_hash = objects.each_with_object([]) do |donor, arr|

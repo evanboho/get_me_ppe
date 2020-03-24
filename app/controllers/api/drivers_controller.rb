@@ -1,7 +1,7 @@
 module Api
   class DriversController < ApiController
 
-    MODEL = Driver
+    # MODEL = Driver
 
     def load_objects
       Driver.all

@@ -9,5 +9,7 @@ Rails.application.routes.draw do
 
   namespace 'api' do
     resources :donors, only: [:index]
+    resources :hospitals, only: [:index]
+    resources :drivers, only: [:index]
   end
 end

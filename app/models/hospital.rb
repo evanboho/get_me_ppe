@@ -1,6 +1,7 @@
 class Hospital < ApplicationRecord
 
   geocoded_by :address
+  before_validation :set_address
   after_validation :geocode
 
   HEADER_VALUES = {
@@ -17,7 +18,35 @@ class Hospital < ApplicationRecord
     sample_collection_products: 'Sample collection products',
     hand_sewn_masks:            'Sample collection products',
     accepts_opened_ppe:         'Can accept opened PPE?',
+    notes:                      'Notes',
   }.freeze
+
+  CSV_MAPPING = {
+    'Recipient_Name'                => :organization,
+    'Recipient_Phone'               => :contact_phone,
+    'Notification'                  => nil,
+    'Recipient_Notes'               => :notes,
+    'Address_Line1'                 => :address_street,
+    'Address_Line2'                 => :address_apartment,
+    'City/Town'                     => :address_city,
+    'Postal_Code'                   => :address_zip,
+    'State/Province'                => :address_state,
+    'Country'                       => :address_country,
+    'Latitude'                      => :latitude,
+    'Longitude'                     => :longitude,
+    'Task_Details'                  => nil,
+    'Pickup'                        => false,
+    'completeAfter'                 => nil,
+    'completeBefore'                => nil,
+    'Organization'                  => nil,
+    'Driver'                        => nil,
+    'Team'                          => nil,
+    'Quantity'                      => nil,
+    'Merchant'                      => nil,
+    'ServiceTime'                   => nil,
+  }.freeze
+
+  extend CsvHelper
 
   def public_attributes
     {
@@ -29,8 +58,6 @@ class Hospital < ApplicationRecord
   end
 
   def self.fetch_all
-    # TODO cache with TTL
-
     results = GetMePpe::Spreadsheets.hospitals
     headers = results.values[0]
     indexes = HEADER_VALUES.keys.each_with_object({}) do |k, obj|
@@ -54,6 +81,24 @@ class Hospital < ApplicationRecord
         hospital.save if hospital.changed?
       end
     end
+  end
+
+  private
+
+  def address_country
+    'USA'
+  end
+
+  def set_address
+    result = Geocoder.search(address).first
+    return true unless result
+
+    self.address_street = "#{result.house_number} #{result.street}"
+    self.address_city = result.city
+    self.address_zip = result.postal_code
+    self.address_state = result.state
+    self.address = "#{address_street}, #{address_city}, #{address_state} #{address_zip}"
+    true
   end
 
 end

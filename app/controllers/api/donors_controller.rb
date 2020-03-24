@@ -1,27 +1,14 @@
 module Api
-  class DonorsController < ApiController
+  class DonorsController < Api::ApiController
 
-    def index
-      if params[:refresh] == 'true'
-        Donor.fetch_all
-      end
+    MODEL = Donor
 
+    def load_objects
       status = params[:status] || ''
       if status == 'any'
-        donors = Donor.all
+        return Donor.all
       else
-        donors = Donor.where(status: status)
-      end
-
-      respond_to do |format|
-        format.json {
-          render json: donors.map(&:public_attributes)
-        }
-        format.csv {
-          send_data Donor.to_csv(donors),
-                    filename: 'donors.csv',
-                    type: 'text/csv'
-        }
+        return Donor.where(status: status)
       end
     end
 

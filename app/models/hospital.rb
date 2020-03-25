@@ -1,7 +1,6 @@
-# require 'concerns/csv_helper'
-# require 'concerns/has_valid_phone_number'
+require 'concerns/csv_helper'
+require_relative 'concerns/has_valid_phone_number'
 
-puts $LOAD_PATH
 
 class Hospital < ApplicationRecord
 

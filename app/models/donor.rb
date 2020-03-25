@@ -1,5 +1,5 @@
-# require 'concerns/csv_helper'
-# require 'concerns/has_valid_phone_number'
+require 'concerns/csv_helper'
+require_relative 'concerns/has_valid_phone_number'
 
 class Donor < ApplicationRecord
 

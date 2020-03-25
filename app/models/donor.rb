@@ -3,9 +3,10 @@ require 'concerns/csv_helper'
 class Donor < ApplicationRecord
 
   extend CsvHelper
+  include HasValidPhoneNumber
 
   geocoded_by :address
-  after_validation :geocode
+  after_validation :geocode, if: -> { address_street_changed? }
 
   HEADER_VALUES = {
     name:                       'Name',
@@ -94,7 +95,7 @@ class Donor < ApplicationRecord
   end
 
   def valid_for_csv?
-    address_street.present?
+    address_street.present? && valid_phone_number?
   end
 
   def notes

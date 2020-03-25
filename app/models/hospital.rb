@@ -3,10 +3,11 @@ require 'concerns/csv_helper'
 class Hospital < ApplicationRecord
 
   extend CsvHelper
+  include HasValidPhoneNumber
 
   geocoded_by :address
-  before_validation :set_address
-  after_validation :geocode, if: -> { address.changed? }
+  before_validation :set_address, if: -> { address_changed? }
+  after_validation :geocode, if: -> { address_changed? }
 
   HEADER_VALUES = {
     organization:               'Organization (bold: regional)',
@@ -86,13 +87,23 @@ class Hospital < ApplicationRecord
   end
 
   def valid_for_csv?
-    address_street.present?
+    address_street.present? && valid_phone_number?
   end
 
   private
 
   def address_country
     'USA'
+  end
+
+  def clean_contact_phone
+    clean_phone = contact_phone.scan(/\d/)
+    if clean_phone.length == 10
+      self.contact_phone = "(#{clean_phone[0..2].join('')}) " \
+                            "#{clean_phone[3..5].join('')}-" \
+                            "#{clean_phone[6..9].join('')}"
+    end
+    true
   end
 
   def set_address

@@ -11,15 +11,15 @@ class Donor < ApplicationRecord
 
   HEADER_VALUES = {
     name:                       'Name',
-    status:                     'Status',
-    number_of_masks:            'Approx # Masks',
-    mask_condition:             'Mask Condition',
+    status:                     'ADMIN: Status',
+    number_of_masks:            'APPROX. HOW MANY UNUSED MASKS ARE YOU ABLE TO DONATE?',
+    mask_condition:             'WHAT IS THE CONDITION OF THE MASKS?',
     email_address:              'Email address',
     phone_number:               'Phone number',
-    address_street:             "Pickup location\n(Street name and number)",
-    address_apartment:          "Pickup location (Apartment)",
-    address_city:               'Pickup location (City)',
-    address_zip:                'Pickup location (Zip Code)',
+    address_street:             'PICKUP LOCATION (STREET NAME AND NUMBER; E.G 123 FAKE STREET)',
+    address_apartment:          'PICKUP LOCATION (APARTMENT/UNIT)',
+    address_city:               'PICKUP LOCATION (CITY)',
+    address_zip:                'PICKUP LOCATION (ZIP CODE)',
     region:                     'Region',
   }.freeze
 
@@ -69,7 +69,7 @@ class Donor < ApplicationRecord
   end
 
   def self.fetch_all
-    results = GetMePpe::Spreadsheets.active_offers
+    results = GetMePpe::Spreadsheets.donor_responses_internal_master
 
     headers = results.values[0].map(&:upcase)
     indexes = HEADER_VALUES.keys.each_with_object({}) do |k, obj|

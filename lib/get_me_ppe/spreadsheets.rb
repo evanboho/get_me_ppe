@@ -4,7 +4,7 @@ module GetMePpe
     SHEET_MAP = {
       active_offers: {
         key: '1_j_491PKcHSZPFmyQCyBuks5RSmOKunbE823UkJ0Mww',
-        range: 'Sheet1'
+        range: 'A1:Z99'
       }.freeze,
       hospitals: {
         key: '1IHeI3IA6eLSlUUjpQXPPLufEOtAKfT0Spxv36fk3eVo',
@@ -13,7 +13,11 @@ module GetMePpe
       drivers: {
         key: '1UYpr45GHUj_f2ozXh-68T-NndnDOgvG4ZvQtSj6DeUE',
         range: 'A1:Z99'
-      }.freeze
+      }.freeze,
+      donor_responses_internal_master: {
+        key: '1Rp_KFIjArK_Ey44aYYgYsv0ifbwcwDmBn3kA5WAmr34',
+        range: 'A1:Z99'
+      }
     }.freeze
 
     class << self
@@ -28,6 +32,10 @@ module GetMePpe
 
       def donors
         GoogleSheets.spreadsheet(SHEET_MAP.fetch(:donors))
+      end
+
+      def donor_responses_internal_master
+        GoogleSheets.spreadsheet(SHEET_MAP.fetch(:donor_responses_internal_master))
       end
 
     end

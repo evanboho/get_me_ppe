@@ -3,8 +3,8 @@
 %div{style: 'max-width: 1080px; margin: 0 auto;'}
   %h1 Donors
 
-  - fields = %i(id address_city region number_of_masks latitude longitude)
-  %table.table
+  - fields = %i(timestamp address_city region number_of_masks status)
+  %table.pure-table.pure-table-bordered
     %thead
       %tr
         - fields.each do |field|
@@ -12,12 +12,13 @@
         %th
         %th
     %tbody
-      - @donors.each do |donor|
-        %tr
+      - @donors.each_with_index do |donor, idx|
+        %tr{class: idx % 2 == 0 ? 'pure-table-even' : 'pure-table-odd'}
           - fields.each do |field|
             %td= donor.send(field)
           %td
             - if donor.onfleet_task_id
-              = link_to donor.onfleet_task_id, onfleet_task_donor_path(donor)
+              = link_to 'View Onfleet Task', onfleet_task_donor_path(donor)
           %td
-            = link_to 'Sync to Onfleet Task', sync_to_onfleet_donor_path(donor),  method: :post
+            - if donor.latitude.present? && donor.longitude.present?
+              = link_to 'Onfleet Sync', sync_to_onfleet_donor_path(donor),  method: :post

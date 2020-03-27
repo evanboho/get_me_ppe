@@ -1,12 +1,16 @@
 class DonorsController < ApplicationController
+
+  # GET
   def index
     @donors = Donor.order(number_of_masks: :desc)
 
-    if params[:status].present?
-      @donors = @donors.where(status: params[:status])
+    if status = params[:status].presence
+      status = ['', nil] if status == 'blank'
+      @donors = @donors.where(status: status)
     end
   end
 
+  # POST
   def sync_to_onfleet
     donor = Donor.find params[:id]
     begin

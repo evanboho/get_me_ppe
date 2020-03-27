@@ -12,7 +12,12 @@ module Api
 
       respond_to do |format|
         format.json {
-          render json: objects.map(&:public_attributes)
+          if params[:to_onfleet]
+            json = objects.map(&:to_onfleet_json)
+          else
+            json = objects.map(&:public_attributes)
+          end
+          render json: json
         }
         format.csv {
           send_data self.class::MODEL.to_csv(objects),

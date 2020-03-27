@@ -11,9 +11,14 @@ module HasValidPhoneNumber
       clean_phone.shift
     end
     if clean_phone.length == 10
-      send("#{phone_field}=", "(#{clean_phone[0..2].join('')}) " \
-                              "#{clean_phone[3..5].join('')}-" \
-                              "#{clean_phone[6..9].join('')}")
+      cleaned_phone = [
+        '+1',
+        clean_phone[0..2].join(''),
+        clean_phone[3..5].join(''),
+        clean_phone[6..9].join(''),
+      ].join('')
+
+      send("#{phone_field}=", cleaned_phone)
     end
     true
   end

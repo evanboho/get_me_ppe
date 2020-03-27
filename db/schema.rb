@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_24_214212) do
+ActiveRecord::Schema.define(version: 2020_03_27_155850) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,6 +31,14 @@ ActiveRecord::Schema.define(version: 2020_03_24_214212) do
     t.integer "number_of_masks"
     t.string "mask_condition"
     t.string "region"
+    t.string "contact_method"
+    t.string "onfleet_task_id"
+    t.string "other_ppe"
+    t.string "donor_comments"
+    t.integer "mask_count"
+    t.integer "gloves_count"
+    t.integer "other_ppe_count"
+    t.index ["onfleet_task_id"], name: "index_donors_on_onfleet_task_id"
   end
 
   create_table "hospitals", force: :cascade do |t|

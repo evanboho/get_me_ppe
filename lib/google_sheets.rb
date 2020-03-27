@@ -22,7 +22,7 @@ module GoogleSheets
 
   def self.api_key_service
     @api_key_service ||= Google::Apis::SheetsV4::SheetsService.new.tap do |service|
-      service.key = ENV['SERVICE_KEY']
+      service.key = ENV['GOOGLE_SHEETS_API_KEY']
     end
   end
 

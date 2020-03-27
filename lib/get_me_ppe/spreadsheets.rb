@@ -15,7 +15,7 @@ module GetMePpe
         range: 'A1:Z99'
       }.freeze,
       donor_responses_internal_master: {
-        key: '1Rp_KFIjArK_Ey44aYYgYsv0ifbwcwDmBn3kA5WAmr34',
+        key: nil,
         range: 'A1:Z999'
       }
     }.freeze
@@ -34,9 +34,11 @@ module GetMePpe
         GoogleSheets.spreadsheet(SHEET_MAP.fetch(:donors))
       end
 
-      def donor_responses_internal_master(key = nil)
+      def donor_responses_internal_master(key: nil, range: nil)
         args = SHEET_MAP.fetch(:donor_responses_internal_master)
         args[:key] = key if key
+        raise 'No key provided' if key.nil?
+        args[:range] = range.upcase if range
         GoogleSheets.spreadsheet(args)
       end
 

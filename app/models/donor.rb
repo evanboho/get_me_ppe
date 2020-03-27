@@ -171,7 +171,7 @@ class Donor < ApplicationRecord
     [address_street, address_apartment, address_city, address_zip, 'USA'].map(&:presence).compact.join(', ')
   end
 
-  def self.fetch_all(key: nil)
+  def self.fetch_all(key: nil, range: nil)
     results = {
       fetched: 0,
       errored: 0,
@@ -180,9 +180,15 @@ class Donor < ApplicationRecord
       skipped: 0,
       updated_ids: [],
     }
-    spreadsheet = GetMePpe::Spreadsheets.donor_responses_internal_master(key)
+    spreadsheet = GetMePpe::Spreadsheets.donor_responses_internal_master(key: key, range: range)
 
-    headers = spreadsheet.values[HEADER_INDEX].map(&:upcase)
+    if range.nil? || range.upcase.start_with?('A1:')
+      headers = spreadsheet.values[HEADER_INDEX].map(&:upcase)
+    else
+      header_request = GetMePpe::Spreadsheets.donor_responses_internal_master(key: key, range: "A#{HEADER_INDEX + 1}:Z#{HEADER_INDEX + 1}")
+      headers = header_request.values[HEADER_INDEX].map(&:upcase)
+    end
+
     indexes = HEADER_VALUES.keys.each_with_object({}) do |k, obj|
       unless obj[k] = headers.index { |a| a == HEADER_VALUES.fetch(k).upcase }
         raise "No index in #{headers} for #{HEADER_VALUES.fetch(k)}"

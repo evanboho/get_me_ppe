@@ -28,7 +28,9 @@ module Api
     end
 
     def sync
-      render json: self.class::MODEL.fetch_all(key: key)
+      render json: self.class::MODEL.fetch_all(key: params[:key], range: params[:range])
+    rescue => e
+      render json: { error: e }
     end
 
     private

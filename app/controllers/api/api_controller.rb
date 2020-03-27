@@ -28,7 +28,7 @@ module Api
     end
 
     def sync
-      render json: self.class::MODEL.fetch_all
+      render json: self.class::MODEL.fetch_all(key: key)
     end
 
     private

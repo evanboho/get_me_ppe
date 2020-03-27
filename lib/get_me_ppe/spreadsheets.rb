@@ -34,8 +34,10 @@ module GetMePpe
         GoogleSheets.spreadsheet(SHEET_MAP.fetch(:donors))
       end
 
-      def donor_responses_internal_master
-        GoogleSheets.spreadsheet(SHEET_MAP.fetch(:donor_responses_internal_master))
+      def donor_responses_internal_master(key = nil)
+        args = SHEET_MAP.fetch(:donor_responses_internal_master)
+        args[:key] = key if key
+        GoogleSheets.spreadsheet(args)
       end
 
     end

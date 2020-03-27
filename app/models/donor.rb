@@ -171,7 +171,7 @@ class Donor < ApplicationRecord
     [address_street, address_apartment, address_city, address_zip, 'USA'].map(&:presence).compact.join(', ')
   end
 
-  def self.fetch_all
+  def self.fetch_all(key: nil)
     results = {
       fetched: 0,
       errored: 0,
@@ -180,7 +180,7 @@ class Donor < ApplicationRecord
       skipped: 0,
       updated_ids: [],
     }
-    spreadsheet = GetMePpe::Spreadsheets.donor_responses_internal_master
+    spreadsheet = GetMePpe::Spreadsheets.donor_responses_internal_master(key)
 
     headers = spreadsheet.values[HEADER_INDEX].map(&:upcase)
     indexes = HEADER_VALUES.keys.each_with_object({}) do |k, obj|

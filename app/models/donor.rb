@@ -82,17 +82,22 @@ class Donor < ApplicationRecord
   end
 
   def quantity
-
+    mask_count + (gloves_count * 0.1) + other_ppe_count
   end
 
-  def get_task_from_onfleet
+  def get_onfleet_task
     Onfleet::Task.get(onfleet_task_id)
   end
 
-  def create_in_onfleet
-    task = Onfleet::Task.create to_onfleet_json
-    self.onfleet_task_id = task.id
-    self.save
+  def sync_onfleet_task
+    if onfleet_task_id
+      task = Onfleet::Task.get onfleet_task_id
+      task.merge!(to_onfleet_json)
+    else
+      task = Onfleet::Task.create to_onfleet_json
+      self.onfleet_task_id = task.id
+      self.save
+    end
   rescue => e
     puts "Error for Donor:#{id}. #{e}"
     nil

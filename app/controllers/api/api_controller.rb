@@ -1,3 +1,5 @@
+require 'lock_manager'
+
 module Api
   class ApiController < ApplicationController
 
@@ -28,9 +30,17 @@ module Api
     end
 
     def sync
-      render json: self.class::MODEL.fetch_all(key: params[:key], range: params[:range])
+      json = LockManager.with_lock("#{self.class::MODEL.name}#sync", timeout: 0) do
+        self.class::MODEL.fetch_all(key: params[:key], range: params[:range])
+      end
+      render json: json
     rescue => e
       render json: { error: e }
+    end
+
+    def sync_to_onfleet
+      donor = Donor.find(params[:id])
+      donor.sync_to_onfleet
     end
 
     private

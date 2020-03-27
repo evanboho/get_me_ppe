@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   namespace 'api' do
     resources :donors, only: [:index] do
       get :sync, on: :collection
+      get :sync_to_onfleet
     end
     resources :hospitals, only: [:index]
     resources :drivers, only: [:index]

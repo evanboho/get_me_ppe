@@ -16,7 +16,7 @@ module GetMePpe
       }.freeze,
       donor_responses_internal_master: {
         key: '1Rp_KFIjArK_Ey44aYYgYsv0ifbwcwDmBn3kA5WAmr34',
-        range: 'A1:Z99'
+        range: 'A1:Z999'
       }
     }.freeze
 

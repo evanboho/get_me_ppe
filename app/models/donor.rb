@@ -8,6 +8,8 @@ class Donor < ApplicationRecord
   extend CsvHelper
   include HasValidPhoneNumber
 
+  HEADER_INDEX = 0
+
   geocoded_by :address
   after_validation :geocode, if: -> { address_street_changed? }
 
@@ -29,6 +31,7 @@ class Donor < ApplicationRecord
     other_ppe:                  'Do you have other PPE you can donate?',
     donor_comments:             'Is there anything else we should know?',
     items_for_pickup:           'Items for Pickup',
+    timestamp:                  'Timestamp',
   }.freeze
 
   CSV_MAPPING = {
@@ -169,30 +172,65 @@ class Donor < ApplicationRecord
   end
 
   def self.fetch_all
-    results = GetMePpe::Spreadsheets.donor_responses_internal_master
+    results = {
+      fetched: 0,
+      errored: 0,
+      created: 0,
+      updated: 0,
+      skipped: 0,
+      updated_ids: [],
+    }
+    spreadsheet = GetMePpe::Spreadsheets.donor_responses_internal_master
 
-    headers = results.values[0].map(&:upcase)
+    headers = spreadsheet.values[HEADER_INDEX].map(&:upcase)
     indexes = HEADER_VALUES.keys.each_with_object({}) do |k, obj|
       unless obj[k] = headers.index { |a| a == HEADER_VALUES.fetch(k).upcase }
         raise "No index in #{headers} for #{HEADER_VALUES.fetch(k)}"
       end
     end
 
-    results.values[1..-1].map do |result|
-      name = result[indexes[:name]]
-      next unless name.present?
+    rows = spreadsheet.values[(HEADER_INDEX + 1)..-1]
+
+    timestamps = rows.map { |row| row[indexes[:timestamp]] }
+    donors_by_timestamp = Donor.where(timestamp: timestamps).each_with_object({}) do |donor, obj|
+      obj[donor.timestamp] = donor
+    end
+
+    results[:fetched] = rows.count
+
+    rows.map do |row|
+      name = row[indexes[:name]]
+      phone_number = row[indexes[:phone_number]]
+      timestamp = row[indexes[:timestamp]]
+
+      unless name.present? && phone_number.present? && timestamp.present?
+        results[:errored] += 1
+        next
+      end
 
       args = HEADER_VALUES.keys.each_with_object({}) do |k, obj|
-        obj[k] = result[indexes.fetch(k)]
+        obj[k] = row[indexes.fetch(k)]
       end
 
-      find_or_initialize_by(name: name).tap do |donor|
-        args.each do |k, v|
-          donor.send("#{k}=", v)
-        end
-        donor.save
+      donor = donors_by_timestamp[timestamp] || Donor.new
+
+      args.each { |k, v| donor.send("#{k}=", v) }
+
+      donor.valid? # run validations to clean data
+
+      if donor.new_record?
+        results[:created] += 1
+      elsif donor.changed?
+        results[:updated_ids] << donor.id
+        results[:updated] += 1
+      else
+        results[:skipped] += 1
       end
+
+      donor.save!
     end
+
+    results
   end
 
   def items_for_pickup=(val)

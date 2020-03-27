@@ -8,7 +8,9 @@ Rails.application.routes.draw do
   root to: 'home#index'
 
   namespace 'api' do
-    resources :donors, only: [:index]
+    resources :donors, only: [:index] do
+      get :sync, on: :collection
+    end
     resources :hospitals, only: [:index]
     resources :drivers, only: [:index]
   end

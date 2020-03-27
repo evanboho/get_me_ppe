@@ -8,6 +8,8 @@ class AddOnfleetTaskIdToDonors < ActiveRecord::Migration[6.0]
     add_column :donors, :gloves_count, :integer
     add_column :donors, :other_ppe_count, :integer
 
+    add_column :donors, :timestamp, :string
+
     add_index :donors, :onfleet_task_id
   end
 end

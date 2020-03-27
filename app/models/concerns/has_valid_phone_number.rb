@@ -5,21 +5,26 @@ module HasValidPhoneNumber
     before_validation :clean_phone_number
   end
 
-  def clean_phone_number
-    clean_phone = send(phone_field).scan(/\d/)
-    if clean_phone.first == '1'
-      clean_phone.shift
+  def self.clean(number_str)
+    return unless number_str
+    cleaned_phone = number_str.scan(/\d/)
+    if cleaned_phone.first == '1'
+      cleaned_phone.shift
     end
-    if clean_phone.length == 10
+    if cleaned_phone.length == 10
       cleaned_phone = [
         '+1',
-        clean_phone[0..2].join(''),
-        clean_phone[3..5].join(''),
-        clean_phone[6..9].join(''),
+        cleaned_phone[0..2].join(''),
+        cleaned_phone[3..5].join(''),
+        cleaned_phone[6..9].join(''),
       ].join('')
-
-      send("#{phone_field}=", cleaned_phone)
+    else
+      nil
     end
+  end
+
+  def clean_phone_number
+    send("#{phone_field}=", HasValidPhoneNumber.clean(send(phone_field)))
     true
   end
 

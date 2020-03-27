@@ -27,6 +27,10 @@ module Api
       end
     end
 
+    def sync
+      render json: self.class::MODEL.fetch_all
+    end
+
     private
 
     def set_default_format_to_json

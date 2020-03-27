@@ -38,6 +38,7 @@ ActiveRecord::Schema.define(version: 2020_03_27_155850) do
     t.integer "mask_count"
     t.integer "gloves_count"
     t.integer "other_ppe_count"
+    t.string "timestamp"
     t.index ["onfleet_task_id"], name: "index_donors_on_onfleet_task_id"
   end
 

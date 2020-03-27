@@ -98,9 +98,6 @@ class Donor < ApplicationRecord
       self.onfleet_task_id = task.id
       self.save
     end
-  rescue => e
-    puts "Error for Donor:#{id}. #{e}"
-    nil
   end
 
   def to_onfleet_json

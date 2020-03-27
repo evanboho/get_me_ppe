@@ -1,0 +1,23 @@
+%div{style: 'height: 20px'}
+
+%div{style: 'max-width: 1080px; margin: 0 auto;'}
+  %h1 Donors
+
+  - fields = %i(id address_city region number_of_masks latitude longitude)
+  %table.table
+    %thead
+      %tr
+        - fields.each do |field|
+          %th= field.to_s.titleize
+        %th
+        %th
+    %tbody
+      - @donors.each do |donor|
+        %tr
+          - fields.each do |field|
+            %td= donor.send(field)
+          %td
+            - if donor.onfleet_task_id
+              = link_to donor.onfleet_task_id, onfleet_task_donor_path(donor)
+          %td
+            = link_to 'Sync to Onfleet Task', sync_to_onfleet_donor_path(donor),  method: :post

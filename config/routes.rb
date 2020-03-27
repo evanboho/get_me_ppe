@@ -7,6 +7,11 @@ Rails.application.routes.draw do
 
   root to: 'home#index'
 
+  resources :donors, only: [:index] do
+    post :sync_to_onfleet, on: :member
+    get :onfleet_task, on: :member
+  end
+
   namespace 'api' do
     resources :donors, only: [:index] do
       get :sync, on: :collection

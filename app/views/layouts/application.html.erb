@@ -27,8 +27,8 @@
       <div style="float: left; padding-left: 20px;">
         <% if notice %>
           <div class="alert alert-success"><%= notice %></div>
-        <% elsif alert %>
-          <div class="alert alert-danger"><%= alert %></div>
+        <% elsif alert || flash[:error] %>
+          <div class="alert alert-danger"><%= alert || flash[:error] %></div>
         <% end %>
       </div>
       <div style="float: right">

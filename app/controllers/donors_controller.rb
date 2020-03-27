@@ -10,6 +10,11 @@ class DonorsController < ApplicationController
     end
   end
 
+  # GET
+  def show
+    @donor = Donor.find(params[:id])
+  end
+
   # POST
   def sync_to_onfleet
     donor = Donor.find params[:id]
@@ -20,6 +25,17 @@ class DonorsController < ApplicationController
       message = matcher[:message]
       cause = matcher[:cause]
       flash[:error] = "Error syncing to Onfleet: #{message} #{cause}"
+    end
+    redirect_to donors_path
+  end
+
+  # POST
+  def geocode
+    donor = Donor.find(params[:id])
+    if donor.geocode.nil?
+      flash[:error] = 'Could not geocode donor'
+    else
+      donor.save
     end
     redirect_to donors_path
   end

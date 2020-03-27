@@ -2,6 +2,13 @@
 
 %div{style: 'max-width: 1080px; margin: 0 auto;'}
   %h1 Donors
+  %div
+    Filters
+    = link_to 'Any status', donors_path
+    - Donor.pluck(:status).uniq.each do |status|
+      - next if status == ''
+      - status = 'blank' if status.nil?
+      = link_to "status=#{status}", donors_path(status: status)
 
   - fields = %i(timestamp address_city region number_of_masks status)
   %table.pure-table.pure-table-bordered
@@ -9,6 +16,7 @@
       %tr
         - fields.each do |field|
           %th= field.to_s.titleize
+        %th Onfleet Task
         %th
         %th
     %tbody
@@ -22,3 +30,7 @@
           %td
             - if donor.latitude.present? && donor.longitude.present?
               = link_to 'Onfleet Sync', sync_to_onfleet_donor_path(donor),  method: :post
+            - else
+              = link_to 'Try Geocode', geocode_donor_path(donor), method: :post
+          %td
+            = link_to 'View', donor_path(donor)

@@ -1,0 +1,14 @@
+%div{style: 'height: 80px'}
+%div{style: 'width: 980px; margin: 0 auto'}
+  %table.pure-table.pure-table-striped
+    %thead
+      %tr
+        %th Key
+        %th Value
+    %tbody
+      - @donor.attributes.each do |k, v|
+        %tr
+          %td=k
+          %td=v
+
+

@@ -1,5 +1,3 @@
-require 'lock_manager'
-
 module Api
   class ApiController < ApplicationController
 

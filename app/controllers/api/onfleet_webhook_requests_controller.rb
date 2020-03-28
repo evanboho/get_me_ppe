@@ -3,7 +3,11 @@ module Api
     skip_before_action :verify_authenticity_token
 
     def index
-      render json: OnfleetWebhookRequest.all.map(&:body)
+      if params[:check]
+        render plain: params[:check]
+      else
+        render json: OnfleetWebhookRequest.all.map(&:body)
+      end
     end
 
     def create

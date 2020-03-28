@@ -20,5 +20,7 @@ Rails.application.routes.draw do
     end
     resources :hospitals, only: [:index]
     resources :drivers, only: [:index]
+
+    resources :onfleet_webhook_requests, only: [:index, :create]
   end
 end

@@ -9,7 +9,7 @@ module Api
     def create
       request_body = request.body.read
       OnfleetWebhookRequest.create(body: JSON.parse(request_body))
-      render json: { succes: true }
+      render json: request_body
     rescue => e
       render json: { succes: false, error: { class: e.class.name, message: e.message } }
     end

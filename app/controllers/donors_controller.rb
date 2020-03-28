@@ -1,5 +1,7 @@
 class DonorsController < ApplicationController
 
+  before_action :authenticate_user!
+
   # GET
   def index
     @donors = Donor.order(number_of_masks: :desc)

@@ -4,6 +4,7 @@ module Api
     before_action :set_default_format_to_json
 
     def index
+      raise 'Not authorized'
       if params[:refresh] == 'true'
         self.class::MODEL.fetch_all
       end

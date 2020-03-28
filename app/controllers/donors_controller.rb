@@ -41,6 +41,10 @@ class DonorsController < ApplicationController
   end
 
   def onfleet_task
-    render json: Donor.find(params[:id]).get_onfleet_task
+    donor = Donor.find(params[:id])
+    unless @onfleet_task = donor.get_onfleet_task
+      flash[:error] = 'Could not find Onfleet task for donor'
+      redirect_to donors_path
+    end
   end
 end

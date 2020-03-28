@@ -19,18 +19,18 @@ class Donor < ApplicationRecord
   HEADER_VALUES = {
     name:                       'Name',
     status:                     'ADMIN: Status',
-    number_of_masks:            'APPROX. HOW MANY UNUSED MASKS ARE YOU ABLE TO DONATE?',
-    mask_condition:             'WHAT IS THE CONDITION OF THE MASKS?',
+    number_of_masks:            'Approx. # unused masks',
+    mask_condition:             'Masks Condition',
     email_address:              'Email address',
     phone_number:               'Phone number',
-    address_street:             'PICKUP LOCATION (STREET NAME AND NUMBER; E.G 123 FAKE STREET)',
-    address_apartment:          'PICKUP LOCATION (APARTMENT/UNIT)',
-    address_city:               'PICKUP LOCATION (CITY)',
-    address_zip:                'PICKUP LOCATION (ZIP CODE)',
+    address_street:             'Street Name (Pickup)',
+    address_apartment:          'Apartment/Unit (Pickup)',
+    address_city:               'City (Pickup)',
+    address_zip:                'Zip (Pickup)',
     region:                     'Region',
     other_ppe:                  'Do you have other PPE you can donate?',
     donor_comments:             'Is there anything else we should know?',
-    items_for_pickup:           'Items for Pickup',
+    items_for_pickup:           'Items for Pickup (DO NOT EDIT - Update fields on right)',
     timestamp:                  'Timestamp',
   }.freeze
 
@@ -180,7 +180,6 @@ class Donor < ApplicationRecord
       created: 0,
       updated: 0,
       skipped: 0,
-      updated_ids: [],
     }
     spreadsheet = GetMePpe::Spreadsheets.donor_responses_internal_master(key: key, range: range)
 
@@ -229,7 +228,6 @@ class Donor < ApplicationRecord
       if donor.new_record?
         results[:created] += 1
       elsif donor.changed?
-        results[:updated_ids] << donor.id
         results[:updated] += 1
       else
         results[:skipped] += 1

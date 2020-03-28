@@ -8,7 +8,7 @@
     - Donor.pluck(:status).uniq.each do |status|
       - next if status == ''
       - status = 'blank' if status.nil?
-      = link_to "status=#{status}", donors_path(status: status)
+      = link_to status, donors_path(status: status)
 
   - fields = %i(timestamp address_city region number_of_masks status)
   %table.pure-table.pure-table-bordered

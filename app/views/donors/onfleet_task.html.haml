@@ -1,0 +1,15 @@
+%div{style: 'height: 80px'}
+%div{style: 'width: 980px; margin: 0 auto'}
+
+  = link_to 'View in Onfleet', "https://onfleet.com/dashboard#/manage?open=task&taskId=#{@onfleet_task.params['shortId']}&taskEdit=false", target: '_blank'
+
+  %table.pure-table.pure-table-striped
+    %thead
+      %tr
+        %th Key
+        %th Value
+    %tbody
+      - @onfleet_task.params.each do |k, v|
+        %tr
+          %td=k
+          %td=v

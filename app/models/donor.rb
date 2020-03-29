@@ -62,9 +62,9 @@ class Donor < ApplicationRecord
   ONFLEET_API_MAPPING = {
     recipients:      :recipients,
     destination:     :destination,
-    pickup:          true,
-    complete_after:  nil,
-    complete_before: nil,
+    pickupTask:      true,
+    completeAfter:   nil,
+    completeBefore:  nil,
     quantity:        :quantity,
     metadata:        :metadata,
   }.freeze

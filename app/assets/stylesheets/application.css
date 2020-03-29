@@ -40,3 +40,6 @@ ul {
   list-style: none;
 }
 
+.manual-geocode input {
+  width: 100%;
+}

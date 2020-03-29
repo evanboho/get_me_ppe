@@ -7,9 +7,10 @@ Rails.application.routes.draw do
 
   root to: 'home#index'
 
-  resources :donors, only: [:index, :show] do
+  resources :donors, only: [:index, :show, :update] do
     post :sync_to_onfleet, on: :member
     post :geocode, on: :member
+    get :manual_geocode, on: :member
     get :onfleet_task, on: :member
   end
 

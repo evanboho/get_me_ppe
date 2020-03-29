@@ -4,7 +4,8 @@ class DonorsController < ApplicationController
 
   # GET
   def index
-    @donors = Donor.order(number_of_masks: :desc)
+    @donors = Donor.order('(case when latitude is null then 1 else 0 end) asc, number_of_masks desc')
+    # @donors = Donor.order('number_of_masks desc')
 
     if status = params[:status].presence
       status = ['', nil] if status == 'blank'

@@ -86,15 +86,17 @@ class Donor < ApplicationRecord
   end
 
   def get_onfleet_task
+    return nil unless onfleet_task_id
     Onfleet::Task.get(onfleet_task_id)
+  rescue
+    nil
   end
 
   def sync_onfleet_task
-    if onfleet_task_id
-      task = Onfleet::Task.get onfleet_task_id
+    if task = Onfleet::Task.get(onfleet_task_id)
       task.merge!(to_onfleet_json)
     else
-      task = Onfleet::Task.create to_onfleet_json
+      task = Onfleet::Task.create(to_onfleet_json)
       self.onfleet_task_id = task.id
       self.save
     end

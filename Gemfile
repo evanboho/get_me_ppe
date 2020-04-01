@@ -33,6 +33,7 @@ gem 'google-api-client'
 gem 'geocoder'
 
 gem 'devise'
+gem 'omniauth-google-oauth2'
 
 gem 'onfleet-ruby'
 

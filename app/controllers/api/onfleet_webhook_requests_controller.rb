@@ -13,7 +13,18 @@ module Api
       if params[:check]
         render plain: params[:check]
       else
-        requests = OnfleetWebhookRequest.all.select do |request|
+        requests = OnfleetWebhookRequest.all
+
+        if params[:before]
+          time = Time.at((params[:before].to_i / 1000) + 1)
+          requests = requests.where('created_at <= ?', time)
+        end
+        if params[:after]
+          time = Time.at((params[:after].to_i / 1000) - 1)
+          requests = requests.where('created_at >= ?', time)
+        end
+
+        requests = requests.select do |request|
           found = true
           if params[:onfleet_task_id]
             found = request.body['taskId'] == params[:onfleet_task_id]

@@ -3,7 +3,8 @@ class OnfleetWebhookRequest < ApplicationRecord
 
   ZENDESK_TICKET_ID_KEY = 'zendesk_ticket_id'
   ZENDESK_STATUSES = {
-    'unassigned' => :open,
+    # TODO
+    # 'unassigned' => :open,
     'assigned'   => :open,
     'active'     => :pending,
     'completed'  => :solved,
@@ -28,6 +29,7 @@ class OnfleetWebhookRequest < ApplicationRecord
     if zendesk_attrs.present?
       ZendeskAPI::Ticket.update(zendesk_client, zendesk_attrs.merge(id: zendesk_ticket_id))
     end
+    true
   rescue => e
     self.zendesk_sync_error = "#{e.class}: #{e.message}"
     true

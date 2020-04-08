@@ -22,6 +22,8 @@ class OnfleetWebhookRequest < ApplicationRecord
   private
 
   def update_zendesk_ticket
+    return unless zendesk_ticket_id
+
     zendesk_attrs = {}
 
     zendesk_attrs[:status] = zendesk_status if zendesk_status

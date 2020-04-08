@@ -35,7 +35,9 @@ gem 'geocoder'
 gem 'devise'
 gem 'omniauth-google-oauth2'
 
+gem 'faraday', '< 1'
 gem 'onfleet-ruby'
+gem 'zendesk_api'
 
 gem 'json'
 
